@@ -59,32 +59,64 @@ def handle_updates(updates):
             text = update["message"]["text"]
             chat = update["message"]["chat"]["id"]
             items = db.get_items(chat)
+            # print(items, type(items))
+            list_title = [item[0] for item in items]
+            # print(list_title, type(list_title))
             if text == "/all":
-                items = db.get_items(chat)
+                # items = db.get_items(chat)
                 # print(items, type(items))
                 items.sort(key=lambda x:x[1], reverse=True)
                 # print(items, type(items))
-                message = []
-                for item in items:
-                    text, p = item
-                    message.append(text)
-                # print(message, type(message))
-                message = "\n".join(message)
-                send_message(message, chat)
+                message = [item[0] for item in items]
+                if message:
+                    # print(message, type(message))
+                    message = "\n".join(message)
+                    send_message(message, chat)
+                else:
+                    send_message("В списке нет задач. Чтобы создать новую, отправь: Имя задачи <приоритет>", chat)
+            elif text == "/help":
+                send_message("Добро пожаловать в твой личный To Do list. "
+                             "Отправь мне любой текст и я сохраню его как задачу.\n"
+                             "\n"
+                             "Если ты хочешь выбрать приоритет новой задаче, отправь: "
+                             "Имя задачи, а затем  <приоритет> через пробел. "
+                             "Вот пример сообщения: Создать задачу <3>\n"
+                             "Приоритет - это одно из чисел от 1 до 3."
+                             "3 - высокий приоритет, 2 - средний, 1 - низкий.\n"
+                             "\n"
+                             "Отправь /all, чтобы получить все задачи по приоритету.\n"
+                             "Отправь /done, чтобы удалить задачу.\n"
+                             "Отправь /help, чтобы посмотреть инструкции."
+                             ,
+                    chat)
             elif text == "/done":
-                keyboard = build_keyboard(items)
+                keyboard = build_keyboard(list_title)
                 # print(items)
-                send_message("Select an item to delete", chat, keyboard)
+                send_message("Выбери задачу, чтобы удалить", chat, keyboard)
             elif text == "/start":
-                send_message("Welcome to your personal To Do list. Send any text to me and I'll store it as an item. Send /done to remove items",
+                send_message("Добро пожаловать в твой личный To Do list. "
+                             "Отправь мне любой текст и я сохраню его как задачу.\n"
+                             "\n"
+                             "Если ты хочешь выбрать приоритет новой задаче, отправь: "
+                             "Имя задачи, а затем  <приоритет> через пробел. "
+                             "Вот пример сообщения:\n"
+                             "Создать задачу <3>\n"
+                             "Приоритет - это одно из чисел от 1 до 3.\n"
+                             "3 - высокий приоритет, 2 - средний, 1 - низкий.\n"
+                             "\n"
+                             "Отправь /all, чтобы получить все задачи по приоритету.\n"
+                             "Отправь /done, чтобы удалить задачу.\n"
+                             "Отправь /help, чтобы посмотреть инструкции."
+                             ,
                     chat)
             elif text.startswith("/"):
                 continue
-            elif text in items:
+            elif text in list_title:
                 db.delete_item(text, chat)
                 items = db.get_items(chat)
-                keyboard = build_keyboard(items)
-                send_message("Select an item to delete", chat, keyboard)
+                list_title = [item[0] for item in items]
+                keyboard = build_keyboard(list_title)
+                send_message("Задача удалена", chat, keyboard)
             else:
                 print(text, type(text))
                 try:
@@ -92,13 +124,17 @@ def handle_updates(updates):
                     priority = priority[:-1]
                     print(text, priority)
                     if (priority == '1') or (priority == '2') or (priority == '3'):
-                        send_message("Succees", chat)
+                        send_message("Приоритет будет учтён", chat)
+                        if text[-1] == ' ':
+                            text = text[:-1]
                     else:
-                        send_message('Incorrect priority', chat)
+                        send_message('Некорректный ввод приоритета. '
+                                     'Отправь /help, чтобы получить инструкции', chat)
+                        return
                 except:
                     priority = '0'
                 db.add_item(text, chat, priority)
-                send_message("Created", chat)
+                send_message("Задача успешно создана!", chat)
                 # items = db.get_items(chat)
                 # message = "\n".join(items)
                 # send_message(message, chat)
