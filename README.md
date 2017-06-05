@@ -13,7 +13,7 @@
 Таким образом осуществляется возможность ведения именно индивидуальных списков, чтобы пользователи при запросе получали только свои задачи из базы даных.
 # Использование бота
 ![alt text](https://cloud.githubusercontent.com/assets/22800693/26804485/cbecc490-4a50-11e7-8d74-ab094d33a18e.png)
-![alt text](https://cloud.githubusercontent.com/assets/22800693/26804540/fa28ed20-4a50-11e7-8207-fea92d7d6133.png)
+![alt text](https://cloud.githubusercontent.com/assets/22800693/26805156/5c37bc88-4a53-11e7-8595-23a08bc316bc.png)
 ![alt text](https://cloud.githubusercontent.com/assets/22800693/26804576/1a3b8910-4a51-11e7-8455-f6a582283664.png)
 ![alt text](https://cloud.githubusercontent.com/assets/22800693/26804589/26a20828-4a51-11e7-8180-01d5f6eae17a.png)
 ![alt text](https://cloud.githubusercontent.com/assets/22800693/26804610/35f847c4-4a51-11e7-9e20-f6874bd17f1a.png)
