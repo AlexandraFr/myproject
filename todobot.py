@@ -157,6 +157,6 @@ def main():
             handle_updates(updates)
         time.sleep(0.5)
 
-
+print(a)
 if __name__ == '__main__':
     main()
